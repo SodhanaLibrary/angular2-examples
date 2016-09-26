@@ -30,6 +30,9 @@ build/Release
 node_modules
 typings
 
+# production
+dist
+
 # Optional npm cache directory
 .npm
 
@@ -39,3 +42,5 @@ typings
 # compiled js and map files
 app/*.js
 app/*.js.map
+production/*.js
+production/*.js.map
