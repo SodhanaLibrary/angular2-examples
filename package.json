@@ -12,7 +12,8 @@
     "build": "npm run clean && tsc",
     "minify": "uglifyjs dist/bundle.js --screw-ie8 --compress --mangle --output dist/bundle.min.js",
     "build_prod": "npm run build && browserify -s main production/main.prod.js > dist/bundle.js && npm run minify && cp -R css dist/css && cp production/index.html dist/ && npm run build_prod_depds",
-    "build_prod_depds": "cp node_modules/core-js/client/shim.min.js dist/dependencies/ && cp node_modules/zone.js/dist/zone.js dist/dependencies/ && cp node_modules/reflect-metadata/Reflect.js dist/dependencies/ && cp node_modules/systemjs/dist/system.src.js dist/dependencies/ && cp systemjs.config.js dist/"
+    "build_prod_depds": "cp node_modules/core-js/client/shim.min.js dist/dependencies/ && cp node_modules/zone.js/dist/zone.js dist/dependencies/ && cp node_modules/reflect-metadata/Reflect.js dist/dependencies/ && cp node_modules/systemjs/dist/system.src.js dist/dependencies/",
+    "run_prod":"lite-server -c production/lite-server.config.json"
   },
   "license": "ISC",
   "dependencies": {

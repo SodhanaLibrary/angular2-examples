@@ -30,9 +30,6 @@ build/Release
 node_modules
 typings
 
-# production
-dist
-
 # Optional npm cache directory
 .npm
 
@@ -40,7 +37,6 @@ dist
 .node_repl_history
 
 # compiled js and map files
-app/*.js
-app/*.js.map
-production/*.js
-production/*.js.map
+app/**/*.js
+app/**/*.js.map
+production/**/*.js.map
