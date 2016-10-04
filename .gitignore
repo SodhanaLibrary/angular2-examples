@@ -40,3 +40,4 @@ typings
 app/**/*.js
 app/**/*.js.map
 production/**/*.js.map
+production/**/*.js

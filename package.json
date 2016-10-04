@@ -2,17 +2,13 @@
   "name": "angular-quickstart",
   "version": "1.0.0",
   "scripts": {
-    "clean": "rm -rf dist && mkdir dist && mkdir dist/dependencies",
     "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
     "lite": "lite-server",
     "postinstall": "typings install",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "typings": "typings",
-    "build": "npm run clean && tsc",
-    "minify": "uglifyjs dist/bundle.js --screw-ie8 --compress --mangle --output dist/bundle.min.js",
-    "build_prod": "npm run build && browserify -s main production/main.prod.js > dist/bundle.js && npm run minify && cp -R css dist/css && cp production/index.html dist/ && npm run build_prod_depds",
-    "build_prod_depds": "cp node_modules/core-js/client/shim.min.js dist/dependencies/ && cp node_modules/zone.js/dist/zone.js dist/dependencies/ && cp node_modules/reflect-metadata/Reflect.js dist/dependencies/ && cp node_modules/systemjs/dist/system.src.js dist/dependencies/",
+    "build_prod": "./build.sh",
     "run_prod":"lite-server -c production/lite-server.config.json"
   },
   "license": "ISC",
