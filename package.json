@@ -8,8 +8,8 @@
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "typings": "typings",
-    "build_prod": "./build.sh",
-    "run_prod":"lite-server -c production/lite-server.config.json"
+    "build": "./build.sh",
+    "prod":"lite-server -c production/lite-server.config.json"
   },
   "license": "ISC",
   "dependencies": {
