@@ -9,3 +9,88 @@
   display: block;
   padding: 20px 0 0 10px;
 }
+
+.red {
+  color: red;
+}
+
+.demoTable {
+  border-collapse: collapse;
+}
+
+.demoTable td {
+  padding: 0.5em;
+}
+
+.overflow_div {
+  padding:10px;
+  overflow:scroll;
+  height:100px;
+  border:1px solid #ccc;
+  margin:10px;
+  float:left;
+  width:100px;
+  cursor:pointer;
+}
+
+.disable-whole-div__myDIV {
+    overflow: scroll;
+    height: 300px;
+    border: 1px solid #ccc;
+    margin: 10px;
+    width: 300px;
+    cursor: pointer;
+    position: relative;
+}
+
+.disable-whole-div__cover {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    background-color: #ddd;
+    opacity: 0.3;
+}
+
+.rightClickPanel {
+  width:200px;
+  padding:20px;
+  position:absolute;
+  border:1px solid #ccc;
+  background:#ccc;
+  display:none;
+}
+
+.header_nav {
+  width:100%;
+    background-color:#666;
+    position:fixed;
+    top:0;
+    left:0;
+   -webkit-transition:0.5s linear all;
+   -moz-transition:0.5s linear all;
+   -o-transition:0.5s linear all;
+   transition:0.5s linear all;
+}
+
+.header_nav--big {
+    height:100px;
+}
+
+.header_nav--small {
+   height:40px;
+}
+
+.menu_selectedItem {
+   background-color:#dfdfdf;
+}
+
+.menu_hoverItem:hover {
+   background-color:#eeeeee;
+}
+
+.menu_item {
+   padding:12px;
+   border:1px solid #ccc;
+   cursor:pointer;
+}

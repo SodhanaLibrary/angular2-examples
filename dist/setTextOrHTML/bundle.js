@@ -25,7 +25,7 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
-            template: "\n  <h2>Append or Prepend HTML to div</h2>\n  <div>\n    <button (click)=\"setText()\">Set Text</button>\n    <button (click)=\"setHtml()\">Set HTML</button>\n  </div><br/><br/>\n  <div [innerHTML]=\"myHtml\"></div>\n  "
+            template: "\n  <h2>Set Text or HTML to div</h2>\n  <div>\n    <button (click)=\"setText()\">Set Text</button>\n    <button (click)=\"setHtml()\">Set HTML</button>\n  </div><br/><br/>\n  <div [innerHTML]=\"myHtml\"></div>\n  <div>{{myHtml}}</div>\n  "
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'my-app',
   template: `
-  <h2>Append or Prepend HTML to div</h2>
+  <h2>Set Text or HTML to div</h2>
   <div>
     <button (click)="setText()">Set Text</button>
     <button (click)="setHtml()">Set HTML</button>
   </div><br/><br/>
   <div [innerHTML]="myHtml"></div>
+  <div>{{myHtml}}</div>
   `
 })
 export class AppComponent {
