@@ -9,13 +9,13 @@ import { Component } from '@angular/core';
   `
 })
 export class AppComponent {
-  imgSrc: string = "../css/assets/twitter_brown.png";
+  imgSrc: string = "https://cdn.rawgit.com/SodhanaLibrary/angular2-examples/master/dist/css/assets/twitter_brown.png";
 
   onMouseOver(): void {
-    this.imgSrc = "../css/assets/twitter_blue.png";
+    this.imgSrc = "https://cdn.rawgit.com/SodhanaLibrary/angular2-examples/master/dist/css/assets/twitter_blue.png";
   }
 
   onMouseOut(): void {
-    this.imgSrc = "../css/assets/twitter_brown.png";
+    this.imgSrc = "https://cdn.rawgit.com/SodhanaLibrary/angular2-examples/master/dist/css/assets/twitter_brown.png";
   }
 }

@@ -12,13 +12,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var AppComponent = (function () {
     function AppComponent() {
-        this.imgSrc = "../css/assets/twitter_brown.png";
+        this.imgSrc = "https://cdn.rawgit.com/SodhanaLibrary/angular2-examples/master/dist/css/assets/twitter_brown.png";
     }
     AppComponent.prototype.onMouseOver = function () {
-        this.imgSrc = "../css/assets/twitter_blue.png";
+        this.imgSrc = "https://cdn.rawgit.com/SodhanaLibrary/angular2-examples/master/dist/css/assets/twitter_blue.png";
     };
     AppComponent.prototype.onMouseOut = function () {
-        this.imgSrc = "../css/assets/twitter_brown.png";
+        this.imgSrc = "https://cdn.rawgit.com/SodhanaLibrary/angular2-examples/master/dist/css/assets/twitter_brown.png";
     };
     AppComponent = __decorate([
         core_1.Component({
