@@ -26,7 +26,7 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
-            template: "\n    <h2>Mouse wheel scroll on below imae</h2>\n    <img mouseWheel [style.width]=\"imgWidth\" src=\"sample.png\" (mouseWheelUp)=\"mouseWheelUpFunc()\" (mouseWheelDown)=\"mouseWheelDownFunc()\"/>\n  "
+            template: "\n    <h2>Mouse wheel scroll on below image</h2>\n    <img mouseWheel [style.width]=\"imgWidth\" src=\"sample.png\" (mouseWheelUp)=\"mouseWheelUpFunc()\" (mouseWheelDown)=\"mouseWheelDownFunc()\"/>\n  "
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);
@@ -88,7 +88,16 @@ var MouseWheelDirective = (function () {
         this.mouseWheelUp = new core_1.EventEmitter();
         this.mouseWheelDown = new core_1.EventEmitter();
     }
-    MouseWheelDirective.prototype.onMouseEnter = function (event) {
+    MouseWheelDirective.prototype.onMouseWheelChrome = function (event) {
+        this.mouseWheelFunc(event);
+    };
+    MouseWheelDirective.prototype.onMouseWheelFirefox = function (event) {
+        this.mouseWheelFunc(event);
+    };
+    MouseWheelDirective.prototype.onMouseWheelIE = function (event) {
+        this.mouseWheelFunc(event);
+    };
+    MouseWheelDirective.prototype.mouseWheelFunc = function (event) {
         var event = window.event || event; // old IE support
         var delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
         if (delta > 0) {
@@ -113,11 +122,23 @@ var MouseWheelDirective = (function () {
         __metadata('design:type', Object)
     ], MouseWheelDirective.prototype, "mouseWheelDown", void 0);
     __decorate([
-        core_1.HostListener('mousewheel'), 
+        core_1.HostListener('mousewheel', ['$event']), 
         __metadata('design:type', Function), 
         __metadata('design:paramtypes', [Object]), 
         __metadata('design:returntype', void 0)
-    ], MouseWheelDirective.prototype, "onMouseEnter", null);
+    ], MouseWheelDirective.prototype, "onMouseWheelChrome", null);
+    __decorate([
+        core_1.HostListener('DOMMouseScroll', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], MouseWheelDirective.prototype, "onMouseWheelFirefox", null);
+    __decorate([
+        core_1.HostListener('onmousewheel', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], MouseWheelDirective.prototype, "onMouseWheelIE", null);
     MouseWheelDirective = __decorate([
         core_1.Directive({ selector: '[mouseWheel]' }), 
         __metadata('design:paramtypes', [])
