@@ -145,3 +145,22 @@ mkdir dist/checkUnCheckRadioButton
 node_modules/browserify/bin/cmd.js -s main app/checkUnCheckRadioButton/main.js > dist/checkUnCheckRadioButton/bundle.js
 node_modules/uglify-js/bin/uglifyjs dist/checkUnCheckRadioButton/bundle.js --screw-ie8 --compress --mangle --output dist/checkUnCheckRadioButton/bundle.min.js
 cp app/checkUnCheckRadioButton/*.html dist/checkUnCheckRadioButton
+
+mkdir dist/ng2GifPreview
+node_modules/browserify/bin/cmd.js -s main app/ng2GifPreview/main.js > dist/ng2GifPreview/bundle.js
+node_modules/uglify-js/bin/uglifyjs dist/ng2GifPreview/bundle.js --screw-ie8 --compress --mangle --output dist/ng2GifPreview/bundle.min.js
+cp app/ng2GifPreview/*.html dist/ng2GifPreview
+cp app/ng2GifPreview/*.css dist/ng2GifPreview
+cp app/ng2GifPreview/*.png dist/ng2GifPreview
+cp app/ng2GifPreview/*.gif dist/ng2GifPreview
+
+mkdir dist/mouseWheelDirective
+node_modules/browserify/bin/cmd.js -s main app/mouseWheelDirective/main.js > dist/mouseWheelDirective/bundle.js
+node_modules/uglify-js/bin/uglifyjs dist/mouseWheelDirective/bundle.js --screw-ie8 --compress --mangle --output dist/mouseWheelDirective/bundle.min.js
+cp app/mouseWheelDirective/*.html dist/mouseWheelDirective
+
+mkdir dist/zoomInZoomOutImage
+node_modules/browserify/bin/cmd.js -s main app/zoomInZoomOutImage/main.js > dist/zoomInZoomOutImage/bundle.js
+node_modules/uglify-js/bin/uglifyjs dist/zoomInZoomOutImage/bundle.js --screw-ie8 --compress --mangle --output dist/zoomInZoomOutImage/bundle.min.js
+cp app/zoomInZoomOutImage/*.html dist/zoomInZoomOutImage
+cp app/zoomInZoomOutImage/*.png dist/zoomInZoomOutImage
