@@ -164,3 +164,8 @@ node_modules/browserify/bin/cmd.js -s main app/zoomInZoomOutImage/main.js > dist
 node_modules/uglify-js/bin/uglifyjs dist/zoomInZoomOutImage/bundle.js --screw-ie8 --compress --mangle --output dist/zoomInZoomOutImage/bundle.min.js
 cp app/zoomInZoomOutImage/*.html dist/zoomInZoomOutImage
 cp app/zoomInZoomOutImage/*.png dist/zoomInZoomOutImage
+
+mkdir dist/customEvent
+node_modules/browserify/bin/cmd.js -s main app/customEvent/main.js > dist/customEvent/bundle.js
+node_modules/uglify-js/bin/uglifyjs dist/customEvent/bundle.js --screw-ie8 --compress --mangle --output dist/customEvent/bundle.min.js
+cp app/customEvent/*.html dist/customEvent
