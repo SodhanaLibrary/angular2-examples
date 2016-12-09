@@ -12,12 +12,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var AppComponent = (function () {
     function AppComponent() {
-        this.myFocusVar = false;
+        this.myTweet = '';
     }
+    AppComponent.prototype.parseTweet = function (val) {
+        this.myTweet = val;
+    };
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
-            template: "\n  <h4>Focus and UnFocus below Text filed</h4>\n  <input  (focus)=\"myFocusVar = true\" (blur)=\"myFocusVar = false\"/><br>\n  <h4>Focus result</h4>\n  <div class=\"red\">\n    {{myFocusVar}}\n  </div>\n  "
+            template: "\n    <h2>Parse tweets using Angular 2</h2>\n    <h4>Enter text in below textarea</h4>\n    <textarea cols=\"50\" rows=\"4\" #myTextArea>hi @sodhanalibrary, this is sample tag #AngularJS, this is link http://blog.sodhanalibrary.com/2016/12/react-tweet-parser-parse-tweets-using.html</textarea>\n    <br/>\n    <button (click)=\"parseTweet(myTextArea.value)\">Parse tweet</button>\n    <h4>Parsed tweet</h4>\n    <tweetParser [tweet]=\"myTweet\"></tweetParser>\n  "
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);
@@ -25,7 +28,7 @@ var AppComponent = (function () {
 }());
 exports.AppComponent = AppComponent;
 
-},{"@angular/core":6}],2:[function(require,module,exports){
+},{"@angular/core":7}],2:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -39,13 +42,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var app_component_1 = require('./app.component');
+var parser_component_1 = require('./parser.component');
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
             imports: [platform_browser_1.BrowserModule],
-            declarations: [app_component_1.AppComponent],
+            declarations: [app_component_1.AppComponent, parser_component_1.TweetParser],
             bootstrap: [app_component_1.AppComponent]
         }), 
         __metadata('design:paramtypes', [])
@@ -54,14 +58,134 @@ var AppModule = (function () {
 }());
 exports.AppModule = AppModule;
 
-},{"./app.component":1,"@angular/core":6,"@angular/platform-browser":8}],3:[function(require,module,exports){
+},{"./app.component":1,"./parser.component":4,"@angular/core":7,"@angular/platform-browser":9}],3:[function(require,module,exports){
 "use strict";
 var platform_browser_dynamic_1 = require('@angular/platform-browser-dynamic');
 var app_module_1 = require('./app.module');
 var platform = platform_browser_dynamic_1.platformBrowserDynamic();
 platform.bootstrapModule(app_module_1.AppModule);
 
-},{"./app.module":2,"@angular/platform-browser-dynamic":7}],4:[function(require,module,exports){
+},{"./app.module":2,"@angular/platform-browser-dynamic":8}],4:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var TweetParser = (function () {
+    function TweetParser() {
+        this.urlClass = 'react-tweet-parser__url';
+        this.userClass = 'react-tweet-parser__user';
+        this.hashtagClass = 'react-tweet-parser__hashTag';
+        this.target = '_blank';
+        this.searchWithHashtags = true;
+        this.parseUsers = true;
+        this.parseUrls = true;
+        this.parseHashtags = true;
+        this.tweet = '';
+        this.myHtml = '';
+    }
+    TweetParser.prototype.generateLink = function (url, urlClass, target, text) {
+        return "<a href=\"" + url + "\" className=\"" + urlClass + "\" target=\"" + target + "\">" + text + "</a>";
+    };
+    TweetParser.prototype.ngOnChanges = function () {
+        this.parseTweet();
+    };
+    TweetParser.prototype.ngOnInit = function () {
+        this.parseTweet();
+    };
+    TweetParser.prototype.parseTweet = function () {
+        var _this = this;
+        var _a = this, urlClass = _a.urlClass, userClass = _a.userClass, hashtagClass = _a.hashtagClass, target = _a.target, searchWithHashtags = _a.searchWithHashtags, parseUsers = _a.parseUsers, parseUrls = _a.parseUrls, parseHashtags = _a.parseHashtags;
+        var REGEX_URL = /(?:\s)(f|ht)tps?:\/\/([^\s\t\r\n<]*[^\s\t\r\n<)*_,\.])/g, //regex for urls
+        REGEX_USER = /\B@([a-zA-Z0-9_]+)/g, //regex for @users
+        REGEX_HASHTAG = /\B(#[Ã¡-ÃºÃ-ÃÃ¤-Ã¼Ã-Ãa-zA-Z0-9_]+)/g; //regex for #hashtags
+        var searchlink, myTweet = this.tweet; //search link for hashtags
+        //Hashtag Search link
+        if (searchWithHashtags) {
+            //this is the search with hashtag
+            searchlink = "https://twitter.com/hashtag/";
+        }
+        else {
+            //this is a more global search including hashtags and the word itself
+            searchlink = "https://twitter.com/search?q=";
+        }
+        //turn URLS in the tweet into... working urls
+        if (parseUrls) {
+            myTweet = myTweet.replace(REGEX_URL, function (url) {
+                var link = _this.generateLink(url, urlClass, target, url);
+                return url.replace(url, link);
+            });
+        }
+        //turn @users in the myTweet into... working urls
+        if (parseUsers) {
+            myTweet = myTweet.replace(REGEX_USER, function (user) {
+                var userOnly = user.slice(1), url = "http://twitter.com/" + userOnly, link = _this.generateLink(url, userClass, target, user);
+                return user.replace(user, link);
+            });
+        }
+        //turn #hashtags in the myTweet into... working urls
+        if (parseHashtags) {
+            myTweet = myTweet.replace(REGEX_HASHTAG, function (hashtag) {
+                var hashtagOnly = hashtag.slice(1), url = searchlink + hashtagOnly, link = _this.generateLink(url, hashtagClass, target, hashtag);
+                return hashtag.replace(hashtag, link);
+            });
+        }
+        this.myHtml = myTweet;
+    };
+    __decorate([
+        core_1.Input('urlClass'), 
+        __metadata('design:type', String)
+    ], TweetParser.prototype, "urlClass", void 0);
+    __decorate([
+        core_1.Input('userClass'), 
+        __metadata('design:type', String)
+    ], TweetParser.prototype, "userClass", void 0);
+    __decorate([
+        core_1.Input('hashtagClass'), 
+        __metadata('design:type', String)
+    ], TweetParser.prototype, "hashtagClass", void 0);
+    __decorate([
+        core_1.Input('target'), 
+        __metadata('design:type', String)
+    ], TweetParser.prototype, "target", void 0);
+    __decorate([
+        core_1.Input('searchWithHashtags'), 
+        __metadata('design:type', Boolean)
+    ], TweetParser.prototype, "searchWithHashtags", void 0);
+    __decorate([
+        core_1.Input('parseUsers'), 
+        __metadata('design:type', Boolean)
+    ], TweetParser.prototype, "parseUsers", void 0);
+    __decorate([
+        core_1.Input('parseUrls'), 
+        __metadata('design:type', Boolean)
+    ], TweetParser.prototype, "parseUrls", void 0);
+    __decorate([
+        core_1.Input('parseHashtags'), 
+        __metadata('design:type', Boolean)
+    ], TweetParser.prototype, "parseHashtags", void 0);
+    __decorate([
+        core_1.Input('tweet'), 
+        __metadata('design:type', String)
+    ], TweetParser.prototype, "tweet", void 0);
+    TweetParser = __decorate([
+        core_1.Component({
+            selector: 'tweetParser',
+            template: "<div [innerHTML]=\"myHtml\"></div>"
+        }), 
+        __metadata('design:paramtypes', [])
+    ], TweetParser);
+    return TweetParser;
+}());
+exports.TweetParser = TweetParser;
+
+},{"@angular/core":7}],5:[function(require,module,exports){
 (function (global){
 /**
  * @license Angular v2.0.0
@@ -3434,7 +3558,7 @@ platform.bootstrapModule(app_module_1.AppModule);
 }));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"@angular/core":6}],5:[function(require,module,exports){
+},{"@angular/core":7}],6:[function(require,module,exports){
 (function (global){
 /**
  * @license Angular v2.0.0
@@ -21125,7 +21249,7 @@ platform.bootstrapModule(app_module_1.AppModule);
 }));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"@angular/core":6}],6:[function(require,module,exports){
+},{"@angular/core":7}],7:[function(require,module,exports){
 (function (global){
 /**
  * @license Angular v2.0.0
@@ -31062,7 +31186,7 @@ platform.bootstrapModule(app_module_1.AppModule);
 }));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"rxjs/Observable":9,"rxjs/Subject":11}],7:[function(require,module,exports){
+},{"rxjs/Observable":10,"rxjs/Subject":12}],8:[function(require,module,exports){
 (function (global){
 /**
  * @license Angular v2.0.0
@@ -31272,7 +31396,7 @@ platform.bootstrapModule(app_module_1.AppModule);
 }));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"@angular/compiler":5,"@angular/core":6,"@angular/platform-browser":8}],8:[function(require,module,exports){
+},{"@angular/compiler":6,"@angular/core":7,"@angular/platform-browser":9}],9:[function(require,module,exports){
 (function (global){
 /**
  * @license Angular v2.0.0
@@ -34336,7 +34460,7 @@ platform.bootstrapModule(app_module_1.AppModule);
 }));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"@angular/common":4,"@angular/core":6}],9:[function(require,module,exports){
+},{"@angular/common":5,"@angular/core":7}],10:[function(require,module,exports){
 "use strict";
 var root_1 = require('./util/root');
 var toSubscriber_1 = require('./util/toSubscriber');
@@ -34477,7 +34601,7 @@ var Observable = (function () {
 }());
 exports.Observable = Observable;
 
-},{"./symbol/observable":15,"./util/root":23,"./util/toSubscriber":24}],10:[function(require,module,exports){
+},{"./symbol/observable":16,"./util/root":24,"./util/toSubscriber":25}],11:[function(require,module,exports){
 "use strict";
 exports.empty = {
     closed: true,
@@ -34486,7 +34610,7 @@ exports.empty = {
     complete: function () { }
 };
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -34647,7 +34771,7 @@ var AnonymousSubject = (function (_super) {
 }(Subject));
 exports.AnonymousSubject = AnonymousSubject;
 
-},{"./Observable":9,"./SubjectSubscription":12,"./Subscriber":13,"./Subscription":14,"./symbol/rxSubscriber":16,"./util/ObjectUnsubscribedError":17}],12:[function(require,module,exports){
+},{"./Observable":10,"./SubjectSubscription":13,"./Subscriber":14,"./Subscription":15,"./symbol/rxSubscriber":17,"./util/ObjectUnsubscribedError":18}],13:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -34688,7 +34812,7 @@ var SubjectSubscription = (function (_super) {
 }(Subscription_1.Subscription));
 exports.SubjectSubscription = SubjectSubscription;
 
-},{"./Subscription":14}],13:[function(require,module,exports){
+},{"./Subscription":15}],14:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -34938,7 +35062,7 @@ var SafeSubscriber = (function (_super) {
     return SafeSubscriber;
 }(Subscriber));
 
-},{"./Observer":10,"./Subscription":14,"./symbol/rxSubscriber":16,"./util/isFunction":21}],14:[function(require,module,exports){
+},{"./Observer":11,"./Subscription":15,"./symbol/rxSubscriber":17,"./util/isFunction":22}],15:[function(require,module,exports){
 "use strict";
 var isArray_1 = require('./util/isArray');
 var isObject_1 = require('./util/isObject');
@@ -35092,7 +35216,7 @@ var Subscription = (function () {
 }());
 exports.Subscription = Subscription;
 
-},{"./util/UnsubscriptionError":18,"./util/errorObject":19,"./util/isArray":20,"./util/isFunction":21,"./util/isObject":22,"./util/tryCatch":25}],15:[function(require,module,exports){
+},{"./util/UnsubscriptionError":19,"./util/errorObject":20,"./util/isArray":21,"./util/isFunction":22,"./util/isObject":23,"./util/tryCatch":26}],16:[function(require,module,exports){
 "use strict";
 var root_1 = require('../util/root');
 function getSymbolObservable(context) {
@@ -35115,14 +35239,14 @@ function getSymbolObservable(context) {
 exports.getSymbolObservable = getSymbolObservable;
 exports.$$observable = getSymbolObservable(root_1.root);
 
-},{"../util/root":23}],16:[function(require,module,exports){
+},{"../util/root":24}],17:[function(require,module,exports){
 "use strict";
 var root_1 = require('../util/root');
 var Symbol = root_1.root.Symbol;
 exports.$$rxSubscriber = (typeof Symbol === 'function' && typeof Symbol.for === 'function') ?
     Symbol.for('rxSubscriber') : '@@rxSubscriber';
 
-},{"../util/root":23}],17:[function(require,module,exports){
+},{"../util/root":24}],18:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -35150,7 +35274,7 @@ var ObjectUnsubscribedError = (function (_super) {
 }(Error));
 exports.ObjectUnsubscribedError = ObjectUnsubscribedError;
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -35176,30 +35300,30 @@ var UnsubscriptionError = (function (_super) {
 }(Error));
 exports.UnsubscriptionError = UnsubscriptionError;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 // typeof any so that it we don't have to cast when comparing a result to the error object
 exports.errorObject = { e: {} };
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 exports.isArray = Array.isArray || (function (x) { return x && typeof x.length === 'number'; });
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 function isFunction(x) {
     return typeof x === 'function';
 }
 exports.isFunction = isFunction;
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 function isObject(x) {
     return x != null && typeof x === 'object';
 }
 exports.isObject = isObject;
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 (function (global){
 "use strict";
 var objectTypes = {
@@ -35217,7 +35341,7 @@ if (freeGlobal && (freeGlobal.global === freeGlobal || freeGlobal.window === fre
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 "use strict";
 var Subscriber_1 = require('../Subscriber');
 var rxSubscriber_1 = require('../symbol/rxSubscriber');
@@ -35237,7 +35361,7 @@ function toSubscriber(nextOrObserver, error, complete) {
 }
 exports.toSubscriber = toSubscriber;
 
-},{"../Subscriber":13,"../symbol/rxSubscriber":16}],25:[function(require,module,exports){
+},{"../Subscriber":14,"../symbol/rxSubscriber":17}],26:[function(require,module,exports){
 "use strict";
 var errorObject_1 = require('./errorObject');
 var tryCatchTarget;
@@ -35257,5 +35381,5 @@ function tryCatch(fn) {
 exports.tryCatch = tryCatch;
 ;
 
-},{"./errorObject":19}]},{},[3])(3)
+},{"./errorObject":20}]},{},[3])(3)
 });

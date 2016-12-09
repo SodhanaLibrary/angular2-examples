@@ -169,3 +169,8 @@ mkdir dist/customEvent
 node_modules/browserify/bin/cmd.js -s main app/customEvent/main.js > dist/customEvent/bundle.js
 node_modules/uglify-js/bin/uglifyjs dist/customEvent/bundle.js --screw-ie8 --compress --mangle --output dist/customEvent/bundle.min.js
 cp app/customEvent/*.html dist/customEvent
+
+mkdir dist/tweetParser
+node_modules/browserify/bin/cmd.js -s main app/tweetParser/main.js > dist/tweetParser/bundle.js
+node_modules/uglify-js/bin/uglifyjs dist/tweetParser/bundle.js --screw-ie8 --compress --mangle --output dist/tweetParser/bundle.min.js
+cp app/tweetParser/*.html dist/tweetParser
